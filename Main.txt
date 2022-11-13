@@ -1,0 +1,39 @@
+import java.util.*;
+
+public class Main
+{
+    public static ArrayList<Integer> denom() {
+	    Scanner input = new Scanner(System.in);
+        System.out.print("Enter the denomiations as a list seperated by spaces (ex: 10 8 2 1 4): ");
+        String denomiations = input.nextLine();
+		
+		String[] denomStrList = denomiations.split(" ");
+		
+        ArrayList<Integer> denomIntList = new ArrayList<Integer>();
+        
+        for (int i = 0; i < denomStrList.length; i++) {
+            denomIntList.add(Integer.valueOf(denomStrList[i]));
+        }
+		
+		Collections.sort(denomIntList, Collections.reverseOrder());
+		return denomIntList;
+	}
+	
+	public static int change() {
+	    Scanner input = new Scanner(System.in);
+		System.out.print("Enter the amount of change needed (ex: 42): ");
+        String changeStr = input.nextLine();
+		int changeInt = Integer.valueOf(changeStr);
+		return changeInt;
+	}
+    
+	public static void main(String[] args) {
+		
+		ArrayList<Integer> denomIntList = denom();
+		System.out.println(denomIntList);
+		
+		int changeInt = change();
+		System.out.println(changeInt);
+	}
+	
+}
