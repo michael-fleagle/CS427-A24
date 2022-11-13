@@ -1,6 +1,14 @@
+// Authors: Hunter Pohl, Jacob Fisher, Michael Fleagle
+// CS 427 A24
+// Date: November 14, 2022
+
+// import necessary libraries
 import java.util.*;
 import java.lang.Math;
 
+
+
+// Main Class
 public class Main
 {
     public static ArrayList<Integer> denom() {
@@ -43,14 +51,28 @@ public class Main
     }
     
     
+    static class IntegerCompare implements Comparator<Integer>{
+    // Overriding compare() method of Comparator
+                // for descending order of ints
+        public int compare(Integer i1, Integer i2) {
+            if (i1 < i2)
+                return 1;
+            else if (i1 > i2)
+                return -1;
+            return 0;
+        }
+    }
+    
+   // Main/driver method
 	public static void main(String[] args) {
 		
+        
 		ArrayList<Integer> denomIntList = denom();
 		System.out.println("The possible coins to hand back (coin denomination): " + denomIntList);
 		
 		int changeInt = change();
 		System.out.println("Change back needed: " + changeInt);
-		int amountLeft = changeInt;
+		
 		
 		System.out.println();
 		
@@ -60,34 +82,48 @@ public class Main
 		    return;
 		}
 		
-		int[] amountList = new int[denomIntList.size()];
 		
+		
+		// Creating empty priority queue with Comparator
+        PriorityQueue<Integer> pQueue = new PriorityQueue<Integer>(denomIntList.size(), new IntegerCompare());
+        
+        for (int i = 0; i < denomIntList.size(); i++) {
+            pQueue.add(denomIntList.get(i));
+        }
+        
+        
 
-		for (int i = 0; i < amountList.length; i++) {
-		    int x = coinMod(denomIntList.get(i), amountLeft);
+
+		
+		int[] amountList = new int[denomIntList.size()];
+		int amountLeft = changeInt;
+		Integer val = null;
+		int amountEle = 0;
+        while( (val = pQueue.peek()) != null) {
+            int x = coinMod(pQueue.peek(), amountLeft);
     		//System.out.println("x = " + x);
     		
-    		int y = remainder(denomIntList.get(i), amountLeft);
+    		int y = remainder(pQueue.peek(), amountLeft);
     		//System.out.println("y = " + y);
     		
-    		amountList[i] = x;
+    		amountList[amountEle++] = x;
     		amountLeft = y;
-		}
-        
+            pQueue.poll();
+        }
+
+
         System.out.println("Amount of each coin to give:");
         
-        for (int i = 0; i < denomIntList.size(); i++)
+
+	    HashMap<Integer, Integer> changeBack = new HashMap<Integer, Integer>();
+	    for (int i = 0; i < denomIntList.size(); i++)
         {
-            System.out.print(denomIntList.get(i) + "\t");
+            changeBack.put(denomIntList.get(i), amountList[i]);
         }
-        
+	    
+
+        System.out.println(changeBack);
         System.out.println();
-        
-		for (int i = 0; i < amountList.length; i++)
-        {
-            System.out.print(amountList[i] + "\t");
-        }
-	    System.out.println();
 	    System.out.println("Change back needed still: " + amountLeft);
 	    
 	}
